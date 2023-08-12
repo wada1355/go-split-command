@@ -7,7 +7,7 @@ import (
 	"github.com/wata1355/go-split-command/utils"
 )
 
-func splitByLines(filePath string, linesPerFile int) error {
+func SplitByLines(filePath string, linesPerFile int) error {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return err

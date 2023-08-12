@@ -7,7 +7,7 @@ import (
 	"github.com/wata1355/go-split-command/utils"
 )
 
-func splitByBytes(filePath string, bytesPerFile int) error {
+func SplitByBytes(filePath string, bytesPerFile int) error {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return err

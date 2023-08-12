@@ -14,11 +14,11 @@ type Options struct {
 func Split(options Options) error {
 	switch {
 	case options.Lines > 0:
-		return splitByLines(options.FilePath, options.Lines)
+		return SplitByLines(options.FilePath, options.Lines)
 	case options.NumFiles > 0:
-		return splitByNumFiles(options.FilePath, options.NumFiles)
+		return SplitByNumFiles(options.FilePath, options.NumFiles)
 	case options.Bytes > 0:
-		return splitByBytes(options.FilePath, options.Bytes)
+		return SplitByBytes(options.FilePath, options.Bytes)
 	default:
 		return errors.New("please specify a split option (-l, -n, or -b)")
 	}
