@@ -8,9 +8,10 @@ import (
 
 // 通常処理 3.353s
 // 並行化（1回目）12.596s
-func BenchmarkSplitByLines(b *testing.B) {
+// 並行化（2回目）3.081s
+func BenchmarkSplitByNumFiles(b *testing.B) {
 	filePath := "./testfile.txt"
-	numFiles := 100
+	numFiles := 10
 
 	b.ResetTimer()
 

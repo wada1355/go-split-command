@@ -22,16 +22,53 @@ func SplitByLines(filePath string, linesPerFile int) error {
 	}
 	defer file.Close()
 
-	// 一度ファイル全体をスキャンしているが、ゴルーチン内で再度ファイルを開いて部分的な読み取りを行っているため、結果的に二重の操作となっている
-	totalLines, err := utils.GetLines(filePath)
+	scanner := bufio.NewScanner(file)
+	var writer *bufio.Writer
+	var newFile *os.File
+	lineCount := 0
+	newFileNum := 0
+
+	for scanner.Scan() {
+		if lineCount == 0 || lineCount%linesPerFile == 0 {
+			if err := utils.WriteToFile(writer, newFile); err != nil {
+				return err
+			}
+			newFileNum++
+			newFile, err = utils.CreateNewFile(filePath, newFileNum)
+			if err != nil {
+				return err
+			}
+			writer = bufio.NewWriter(newFile)
+		}
+
+		writer.WriteString(scanner.Text() + "\n")
+		lineCount++
+	}
+
+	if err := utils.WriteToFile(writer, newFile); err != nil {
+		return err
+	}
+
+	return scanner.Err()
+}
+
+func SplitByLines_parallel(filePath string, linesPerFile int) error {
+	file, err := os.Open(filePath)
 	if err != nil {
 		return err
 	}
-	if totalLines == 0 {
+	defer file.Close()
+
+	lines, err := readLines(filePath)
+	if err != nil {
+		return err
+	}
+	if len(lines) == 0 {
 		return errors.New("Specified file was empty")
 	}
 
 	var tasks []splitTask
+	totalLines := len(lines)
 	for startLine := 0; startLine < totalLines; startLine += linesPerFile {
 		endLine := startLine + linesPerFile
 		if endLine > totalLines {
@@ -45,7 +82,7 @@ func SplitByLines(filePath string, linesPerFile int) error {
 		wg.Add(1)
 		go func(task splitTask) {
 			defer wg.Done()
-			processSplitTask(filePath, task)
+			processSplitTask(filePath, task, lines[task.startLine:task.endLine])
 		}(t)
 	}
 
@@ -54,45 +91,34 @@ func SplitByLines(filePath string, linesPerFile int) error {
 	return nil
 }
 
-func processSplitTask(filePath string, task splitTask) error {
-	// 各ゴルーチンごとにファイルをオープンしてしまうと以下のような問題が生じる
-	// 例1：ファイルをオープンできない（OSには同時にオープンできるファイルの最大数という制限がある）
-	// 例2：パフォーマンスの低下
-	//     ・同時に多数のI/O操作が発生するため
-	//     ・複数のゴルーチンが同時に同じファイルにアクセスすると、競合状態やディスクのシーク時間が増加するため
-	//     ・メモリ使用量が増加するため
+func readLines(filePath string) ([]string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	var writer *bufio.Writer
-	var newFile *os.File
+	var lines []string
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+	return lines, scanner.Err()
+}
 
-	for i := 0; i <= task.endLine; i++ {
-		if !scanner.Scan() {
-			break
-		}
-		// 不要なループが発生している
-		if i < task.startLine {
-			continue
-		}
-		if i == task.startLine {
-			newFile, err = utils.CreateNewFile(filePath, task.fileNum)
-			if err != nil {
-				return err
-			}
-			writer = bufio.NewWriter(newFile)
-		}
-		_, err := writer.WriteString(scanner.Text() + "\n")
+func processSplitTask(filePath string, task splitTask, lines []string) error {
+	newFile, err := utils.CreateNewFile(filePath, task.fileNum)
+	if err != nil {
+		return err
+	}
+	defer newFile.Close()
+
+	writer := bufio.NewWriter(newFile)
+	for _, line := range lines {
+		_, err := writer.WriteString(line + "\n")
 		if err != nil {
 			return err
 		}
 	}
-	if err := utils.WriteToFile(writer, newFile); err != nil {
-		return err
-	}
-	return scanner.Err()
+	return writer.Flush()
 }
