@@ -15,6 +15,8 @@ import (
 // 5. 単体テストの導入 0%
 // 6. 追加のオプションの実装 0%
 
+// 工夫した点
+
 func main() {
 	l := flag.Int("l", 0, "Number of lines per file")
 	n := flag.Int("n", 0, "Number of files to split into")

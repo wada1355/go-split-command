@@ -33,3 +33,20 @@ func getOutputFileName(originalPath string, fileNum int) string {
 	base := filepath.Base(originalPath)
 	return fmt.Sprintf("%s.part_%d", base, fileNum)
 }
+
+func GetLines(filePath string) (int, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	lineCount := 0
+
+	for scanner.Scan() {
+		lineCount++
+	}
+
+	return lineCount, nil
+}
