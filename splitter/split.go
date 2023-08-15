@@ -8,17 +8,16 @@ type Options struct {
 	Lines    int
 	NumFiles int
 	Bytes    int
-	FilePath string
 }
 
-func Split(options Options) error {
+func Split(options Options, filePath string) error {
 	switch {
 	case options.Lines > 0:
-		return SplitByLines(options.FilePath, options.Lines)
+		return SplitByLines(filePath, options.Lines)
 	case options.NumFiles > 0:
-		return SplitByNumFiles(options.FilePath, options.NumFiles)
+		return SplitByNumFiles(filePath, options.NumFiles)
 	case options.Bytes > 0:
-		return SplitByBytes(options.FilePath, options.Bytes)
+		return SplitByBytes(filePath, options.Bytes)
 	default:
 		return errors.New("please specify a split option (-l, -n, or -b)")
 	}

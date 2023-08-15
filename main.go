@@ -1,3 +1,13 @@
+// TODO
+// 1. 動くものを作る　100%
+// 2. 可読性を上げる 70%
+// 3. パフォーマンス性を上げる 20%
+// 4. イレギュラーな入力に対応する 80%
+// 5. 単体テストの導入 0%
+// 6. 追加のオプションの実装 0%
+
+// 工夫した点
+
 package main
 
 import (
@@ -5,40 +15,31 @@ import (
 	"log"
 
 	"github.com/wata1355/go-split-command/splitter"
+	"github.com/wata1355/go-split-command/validators"
 )
 
-// TODO
-// 1. 動くものを作る　100%
-// 2. 可読性を上げる 70%
-// 3. パフォーマンス性を上げる 0%
-// 4. イレギュラーな入力に対応する 0%
-// 5. 単体テストの導入 0%
-// 6. 追加のオプションの実装 0%
-
-// 工夫した点
-
 func main() {
-	l := flag.Int("l", 0, "Number of lines per file")
-	n := flag.Int("n", 0, "Number of files to split into")
-	b := flag.Int("b", 0, "Number of bytes per file")
+	var l, n, b int
+
+	flag.IntVar(&l, "l", 0, "Number of lines per file")
+	flag.IntVar(&n, "n", 0, "Number of files to split into")
+	flag.IntVar(&b, "b", 0, "Number of bytes per file")
 
 	flag.Parse()
 
-	args := flag.Args()
-	if len(args) != 1 {
-		log.Fatalln("Please specify file as argument")
-	}
-
-	filePath := args[0]
-
+	fileArgs := flag.Args()
 	options := splitter.Options{
-		Lines:    *l,
-		NumFiles: *n,
-		Bytes:    *b,
-		FilePath: filePath,
+		Lines:    l,
+		NumFiles: n,
+		Bytes:    b,
 	}
 
-	err := splitter.Split(options)
+	if err := validators.ValidateArgs(fileArgs, options); err != nil {
+		log.Fatal(err)
+	}
+
+	filePath := fileArgs[0]
+	err := splitter.Split(options, filePath)
 	if err != nil {
 		log.Fatalf("Failed to split file. error message is %s", err)
 	}
