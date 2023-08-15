@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/wata1355/go-split-command/utils"
+	"github.com/wata1355/go-split-command/fileop"
 )
 
 func SplitByBytes(filePath string, bytesPerFile int) error {
@@ -27,7 +27,7 @@ func SplitByBytes(filePath string, bytesPerFile int) error {
 		}
 
 		newFileNum++
-		newFile, err := utils.CreateNewFile(filePath, newFileNum)
+		newFile, err := fileop.CreateNewFile(filePath, newFileNum)
 		if err != nil {
 			return err
 		}

@@ -7,10 +7,10 @@ import (
 )
 
 // 通常処理 3.353s
-// 並行化（1回目）12.596s
-// 並行化（2回目）3.081s
+// 並行化（最初の実装）12.596s
+// 並行化（2回目の実装）3.081s
 func BenchmarkSplitByNumFiles(b *testing.B) {
-	filePath := "./testfile.txt"
+	filePath := "./testfile.txt" // 1GB
 	numFiles := 10
 
 	b.ResetTimer()
