@@ -6,8 +6,8 @@ import (
 	"github.com/wata1355/go-split-command/fileop"
 )
 
-func SplitByNumFiles(filePath string, numFiles int) error {
-	lineNum, err := fileop.GetLines(filePath)
+func (splitter *Splitter) SplitByNumFiles() error {
+	lineNum, err := fileop.CountLines(splitter.FileArgs.FilePath)
 	if err != nil {
 		return err
 	}
@@ -15,10 +15,11 @@ func SplitByNumFiles(filePath string, numFiles int) error {
 		return errors.New("file has no lines")
 	}
 	var linesPerFile int
-	if lineNum < numFiles {
+	if lineNum < splitter.Options.NumFiles {
 		linesPerFile = lineNum
 	} else {
-		linesPerFile = lineNum / numFiles
+		linesPerFile = lineNum / splitter.Options.NumFiles
 	}
-	return SplitByLines(filePath, linesPerFile)
+	splitter.Options.Lines = linesPerFile
+	return splitter.SplitByLines()
 }

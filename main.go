@@ -1,13 +1,3 @@
-// TODO
-// 1. 動くものを作る　100%
-// 2. 可読性を上げる 70%
-// 3. パフォーマンス性を上げる 20%
-// 4. イレギュラーな入力に対応する 80%
-// 5. 単体テストの導入 0%
-// 6. 追加のオプションの実装 0%
-
-// 工夫した点
-
 package main
 
 import (
@@ -39,8 +29,13 @@ func main() {
 	}
 
 	filePath := fileArgs[0]
-	err := splitters.Split(options, filePath)
+
+	splitter := &splitters.Splitter{
+		Options:  options,
+		FileArgs: splitters.FileArgs{FilePath: filePath},
+	}
+	err := splitter.Split()
 	if err != nil {
-		log.Fatalf("Failed to split file. error message is %s", err)
+		log.Fatalf("Failed to split file: %s", err)
 	}
 }

@@ -50,10 +50,14 @@ func TestSplitByLines(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			testFilePath := filepath.Join(dirName, tt.fileName)
 			if err := os.WriteFile(testFilePath, []byte(tt.fileContent), 0644); err != nil {
-				t.Fatalf("Failed to create test file. err is %v", err)
+				t.Fatalf("Failed to write test file: %v", err)
 			}
-			if err := splitters.SplitByLines(testFilePath, tt.linesPerFile); err != nil {
-				t.Fatalf("Failed to split by lines: %v", err)
+			splitter := splitters.Splitter{
+				Options:  splitters.Options{Lines: tt.linesPerFile},
+				FileArgs: splitters.FileArgs{FilePath: testFilePath},
+			}
+			if err := splitter.SplitByLines(); err != nil {
+				t.Fatalf("Failed to split by bytes: %v", err)
 			}
 			for expectedFileName, expectedContent := range tt.expectedFiles {
 				checkFileContent(t, filepath.Join(dirName, expectedFileName), expectedContent)

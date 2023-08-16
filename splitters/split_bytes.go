@@ -7,14 +7,14 @@ import (
 	"github.com/wata1355/go-split-command/fileop"
 )
 
-func SplitByBytes(filePath string, bytesPerFile int) error {
-	file, err := os.Open(filePath)
+func (splitter *Splitter) SplitByBytes() error {
+	file, err := os.Open(splitter.FileArgs.FilePath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	buffer := make([]byte, bytesPerFile)
+	buffer := make([]byte, splitter.Options.Bytes)
 	newFileNum := 0
 
 	for {
@@ -27,13 +27,15 @@ func SplitByBytes(filePath string, bytesPerFile int) error {
 		}
 
 		newFileNum++
-		newFile, err := fileop.CreateNewFile(filePath, newFileNum)
+		newFile, err := fileop.CreateNewFile(splitter.FileArgs.FilePath, newFileNum)
 		if err != nil {
 			return err
 		}
 		defer newFile.Close()
 
-		newFile.Write(buffer[:bytesRead])
+		if _, err := newFile.Write(buffer[:bytesRead]); err != nil {
+			return err
+		}
 	}
 	return nil
 }

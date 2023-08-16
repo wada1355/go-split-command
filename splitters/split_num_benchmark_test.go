@@ -16,6 +16,13 @@ func BenchmarkSplitByNumFiles(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		splitters.SplitByNumFiles(filePath, numFiles)
+		splitter := splitters.Splitter{
+			Options:  splitters.Options{NumFiles: numFiles},
+			FileArgs: splitters.FileArgs{FilePath: filePath},
+		}
+
+		if err := splitter.SplitByNumFiles(); err != nil {
+			b.Fatalf("Failed to split by num files: %v", err)
+		}
 	}
 }

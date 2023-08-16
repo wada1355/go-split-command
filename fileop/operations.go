@@ -28,7 +28,7 @@ func CreateNewFile(filePath string, newFileNum int) (*os.File, error) {
 	if newFileNum < 1 {
 		return nil, errors.New("invalid file number")
 	}
-	outputFileName := getOutputFileName(filePath, newFileNum)
+	outputFileName, _ := getOutputFileName(filePath, newFileNum)
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create file %s: %v", outputFileName, err)
@@ -36,7 +36,7 @@ func CreateNewFile(filePath string, newFileNum int) (*os.File, error) {
 	return outputFile, nil
 }
 
-func GetLines(filePath string) (int, error) {
+func CountLines(filePath string) (int, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return 0, err
@@ -50,12 +50,15 @@ func GetLines(filePath string) (int, error) {
 		lineCount++
 	}
 
-	return lineCount, nil
+	return lineCount, scanner.Err()
 }
 
-func getOutputFileName(originalPath string, fileNum int) string {
+func getOutputFileName(originalPath string, fileNum int) (string, error) {
+	if originalPath == "" {
+		return "", errors.New("invalid file path")
+	}
 	dir, filename := filepath.Split(originalPath)
 	ext := filepath.Ext(filename)
 	baseName := filename[:len(filename)-len(ext)]
-	return filepath.Join(dir, fmt.Sprintf("%s_part%d%s", baseName, fileNum, ext))
+	return filepath.Join(dir, fmt.Sprintf("%s_part%d%s", baseName, fileNum, ext)), nil
 }

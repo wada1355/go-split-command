@@ -10,14 +10,23 @@ type Options struct {
 	Bytes    int
 }
 
-func Split(options Options, filePath string) error {
+type FileArgs struct {
+	FilePath string
+}
+
+type Splitter struct {
+	Options  Options
+	FileArgs FileArgs
+}
+
+func (splitter *Splitter) Split() error {
 	switch {
-	case options.Lines > 0:
-		return SplitByLines(filePath, options.Lines)
-	case options.NumFiles > 0:
-		return SplitByNumFiles(filePath, options.NumFiles)
-	case options.Bytes > 0:
-		return SplitByBytes(filePath, options.Bytes)
+	case splitter.Options.Lines > 0:
+		return splitter.SplitByLines()
+	case splitter.Options.NumFiles > 0:
+		return splitter.SplitByNumFiles()
+	case splitter.Options.Bytes > 0:
+		return splitter.SplitByBytes()
 	default:
 		return errors.New("please specify a split option (-l, -n, or -b)")
 	}

@@ -63,13 +63,16 @@ func TestSplitByNumFiles(t *testing.T) {
 			testFilePath := filepath.Join(dirName, tt.fileName)
 			err := os.WriteFile(testFilePath, []byte(tt.fileContent), 0644)
 			if err != nil {
-				t.Fatalf("Failed to create test file. err is %v", err)
+				t.Fatalf("Failed to write test file: %v", err)
+			}
+			splitter := splitters.Splitter{
+				Options:  splitters.Options{NumFiles: tt.numFiles},
+				FileArgs: splitters.FileArgs{FilePath: testFilePath},
 			}
 
-			if err := splitters.SplitByNumFiles(testFilePath, tt.numFiles); err != nil {
-				t.Fatalf("Failed to split by num files: %v", err)
+			if err := splitter.SplitByNumFiles(); err != nil {
+				t.Fatalf("Failed to split by bytes: %v", err)
 			}
-
 			for expectedFileName, expectedContent := range tt.expectedFiles {
 				checkFileContent(t, filepath.Join(dirName, expectedFileName), expectedContent)
 			}

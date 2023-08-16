@@ -51,10 +51,15 @@ func TestSplitByBytes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			testFilePath := filepath.Join(dirName, tt.fileName)
 			if err := os.WriteFile(testFilePath, []byte(tt.fileContent), 0644); err != nil {
-				t.Fatalf("Failed to create test file. err is %v", err)
+				t.Fatalf("Failed to write test file: %v", err)
 			}
 
-			if err := splitters.SplitByBytes(testFilePath, tt.bytesPerFile); err != nil {
+			splitter := splitters.Splitter{
+				Options:  splitters.Options{Bytes: tt.bytesPerFile},
+				FileArgs: splitters.FileArgs{FilePath: testFilePath},
+			}
+
+			if err := splitter.SplitByBytes(); err != nil {
 				t.Fatalf("Failed to split by bytes: %v", err)
 			}
 
