@@ -8,7 +8,7 @@ import (
 	"github.com/wata1355/go-split-command/splitters"
 )
 
-func ValidateArgs(fileArgs []string, options splitters.Options) error {
+func ValidateArgs(fileArgs []string, options *splitters.Options) error {
 	if err := validateFileArgs(fileArgs); err != nil {
 		return err
 	}
@@ -40,7 +40,11 @@ func validateFileArgs(fileArgs []string) error {
 	return nil
 }
 
-func validateOptions(options splitters.Options) error {
+func validateOptions(options *splitters.Options) error {
+	if options.Lines < 0 || options.NumFiles < 0 || options.Bytes < 0 {
+		return errors.New("options must not be negative numbers")
+	}
+
 	count := []bool{options.Lines > 0, options.NumFiles > 0, options.Bytes > 0}
 	trueCount := 0
 	for _, cond := range count {
@@ -49,7 +53,7 @@ func validateOptions(options splitters.Options) error {
 		}
 	}
 	if trueCount == 0 {
-		return errors.New("Please specify a split option (-l, -n, or -b)")
+		options.Lines = 1000 // Set the -l option to 1000 if no options are specified
 	}
 	if trueCount > 1 {
 		return errors.New("Please specify only one split option (-l, -n, or -b)")

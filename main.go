@@ -34,7 +34,7 @@ func main() {
 		Bytes:    b,
 	}
 
-	if err := validators.ValidateArgs(fileArgs, options); err != nil {
+	if err := validators.ValidateArgs(fileArgs, &options); err != nil {
 		log.Fatal(err)
 	}
 

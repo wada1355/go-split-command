@@ -48,7 +48,7 @@ func TestValidateArgs(t *testing.T) {
 			name:      "no split option",
 			fileArgs:  []string{"file.txt"},
 			options:   splitters.Options{},
-			expectErr: true,
+			expectErr: false,
 		},
 		{
 			name:      "multiple split options",
@@ -60,7 +60,7 @@ func TestValidateArgs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validators.ValidateArgs(tt.fileArgs, tt.options)
+			err := validators.ValidateArgs(tt.fileArgs, &tt.options)
 			if tt.expectErr && err == nil {
 				t.Error("Expected error, got nil")
 			} else if !tt.expectErr && err != nil {
