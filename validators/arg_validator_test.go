@@ -3,7 +3,7 @@ package validators_test
 import (
 	"testing"
 
-	"github.com/wata1355/go-split-command/splitter"
+	"github.com/wata1355/go-split-command/splitters"
 	"github.com/wata1355/go-split-command/validators"
 )
 
@@ -11,49 +11,49 @@ func TestValidateArgs(t *testing.T) {
 	tests := []struct {
 		name      string
 		fileArgs  []string
-		options   splitter.Options
+		options   splitters.Options
 		expectErr bool
 	}{
 		{
 			name:      "valid arguments",
 			fileArgs:  []string{"file.txt"},
-			options:   splitter.Options{Lines: 10},
+			options:   splitters.Options{Lines: 10},
 			expectErr: false,
 		},
 		{
 			name:      "no file argument",
 			fileArgs:  []string{},
-			options:   splitter.Options{Lines: 10},
+			options:   splitters.Options{Lines: 10},
 			expectErr: true,
 		},
 		{
 			name:      "multiple file arguments",
 			fileArgs:  []string{"file1.txt", "file2.txt"},
-			options:   splitter.Options{Lines: 10},
+			options:   splitters.Options{Lines: 10},
 			expectErr: true,
 		},
 		{
 			name:      "nonexistent file",
 			fileArgs:  []string{"nonexistent.txt"},
-			options:   splitter.Options{Lines: 10},
+			options:   splitters.Options{Lines: 10},
 			expectErr: true,
 		},
 		{
 			name:      "empty file",
 			fileArgs:  []string{"emptyFile.txt"},
-			options:   splitter.Options{Lines: 10},
+			options:   splitters.Options{Lines: 10},
 			expectErr: true,
 		},
 		{
 			name:      "no split option",
 			fileArgs:  []string{"file.txt"},
-			options:   splitter.Options{},
+			options:   splitters.Options{},
 			expectErr: true,
 		},
 		{
 			name:      "multiple split options",
 			fileArgs:  []string{"file.txt"},
-			options:   splitter.Options{Lines: 10, Bytes: 10},
+			options:   splitters.Options{Lines: 10, Bytes: 10},
 			expectErr: true,
 		},
 	}

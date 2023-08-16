@@ -1,11 +1,11 @@
-package splitter_test
+package splitters_test
 
 import (
 	"os"
 	"path/filepath"
 	"testing"
 
-	"github.com/wata1355/go-split-command/splitter"
+	"github.com/wata1355/go-split-command/splitters"
 )
 
 func TestSplitByLines(t *testing.T) {
@@ -52,7 +52,7 @@ func TestSplitByLines(t *testing.T) {
 			if err := os.WriteFile(testFilePath, []byte(tt.fileContent), 0644); err != nil {
 				t.Fatalf("Failed to create test file. err is %v", err)
 			}
-			if err := splitter.SplitByLines(testFilePath, tt.linesPerFile); err != nil {
+			if err := splitters.SplitByLines(testFilePath, tt.linesPerFile); err != nil {
 				t.Fatalf("Failed to split by lines: %v", err)
 			}
 			for expectedFileName, expectedContent := range tt.expectedFiles {

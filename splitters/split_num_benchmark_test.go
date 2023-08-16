@@ -1,9 +1,9 @@
-package splitter_test
+package splitters_test
 
 import (
 	"testing"
 
-	"github.com/wata1355/go-split-command/splitter"
+	"github.com/wata1355/go-split-command/splitters"
 )
 
 // 通常処理 3.353s
@@ -16,6 +16,6 @@ func BenchmarkSplitByNumFiles(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		splitter.SplitByNumFiles(filePath, numFiles)
+		splitters.SplitByNumFiles(filePath, numFiles)
 	}
 }

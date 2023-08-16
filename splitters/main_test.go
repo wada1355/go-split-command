@@ -1,4 +1,4 @@
-package splitter_test
+package splitters_test
 
 import (
 	"log"

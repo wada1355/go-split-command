@@ -14,7 +14,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/wata1355/go-split-command/splitter"
+	"github.com/wata1355/go-split-command/splitters"
 	"github.com/wata1355/go-split-command/validators"
 )
 
@@ -28,7 +28,7 @@ func main() {
 	flag.Parse()
 
 	fileArgs := flag.Args()
-	options := splitter.Options{
+	options := splitters.Options{
 		Lines:    l,
 		NumFiles: n,
 		Bytes:    b,
@@ -39,7 +39,7 @@ func main() {
 	}
 
 	filePath := fileArgs[0]
-	err := splitter.Split(options, filePath)
+	err := splitters.Split(options, filePath)
 	if err != nil {
 		log.Fatalf("Failed to split file. error message is %s", err)
 	}

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wata1355/go-split-command/splitter"
+	"github.com/wata1355/go-split-command/splitters"
 )
 
-func ValidateArgs(fileArgs []string, options splitter.Options) error {
+func ValidateArgs(fileArgs []string, options splitters.Options) error {
 	if err := validateFileArgs(fileArgs); err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func validateFileArgs(fileArgs []string) error {
 	return nil
 }
 
-func validateOptions(options splitter.Options) error {
+func validateOptions(options splitters.Options) error {
 	count := []bool{options.Lines > 0, options.NumFiles > 0, options.Bytes > 0}
 	trueCount := 0
 	for _, cond := range count {
