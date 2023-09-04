@@ -51,7 +51,9 @@ TestMain関数に、テストに共通する初期化やクリーンアップの
 
 正常系はもちろん、準正常系、境界値など複数パターンのテストを実施した。
 カバレッジは以下の通り。
-[github.com/wata1355/go-split-command/fileop](http://github.com/wata1355/go-split-command/fileop)     0.327s  coverage: 80.6% of statements [github.com/wata1355/go-split-command/splitters](http://github.com/wata1355/go-split-command/splitters)  0.704s  coverage: 74.6% of statements [github.com/wata1355/go-split-command/validators](http://github.com/wata1355/go-split-command/validators) 0.505s  coverage: 93.3% of statements
+[github.com/wata1355/go-split-command/fileop](http://github.com/wata1355/go-split-command/fileop)     0.327s  coverage: 80.6% of statements 
+[github.com/wata1355/go-split-command/splitters](http://github.com/wata1355/go-split-command/splitters)  0.704s  coverage: 74.6% of statements 
+[github.com/wata1355/go-split-command/validators](http://github.com/wata1355/go-split-command/validators) 0.505s  coverage: 93.3% of statements 
 
 # 設計関連
 
