@@ -37,7 +37,8 @@ macOSやLinuxに標準搭載されているsplitコマンドを、goで自作し
 - 可読性の向上
 
 ### **複数テストケースの実施**
-正常系はもちろん、準正常系、境界値など複数パターンのテストを実施した。 カバレッジは以下の通り。 [github.com/wata1355/go-split-command/fileop](http://github.com/wata1355/go-split-command/fileop) 0.327s coverage: 80.6% of statements  
+正常系はもちろん、準正常系、境界値など複数パターンのテストを実施した。 カバレッジは以下の通り。   
+[github.com/wata1355/go-split-command/fileop](http://github.com/wata1355/go-split-command/fileop) 0.327s coverage: 80.6% of statements  
 [github.com/wata1355/go-split-command/splitters](http://github.com/wata1355/go-split-command/splitters) 0.704s coverage: 74.6% of statements  
 [github.com/wata1355/go-split-command/validators](http://github.com/wata1355/go-split-command/validators) 0.505s coverage: 93.3% of statements  
 
